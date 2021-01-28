@@ -1,26 +1,30 @@
 import { createFilter } from 'rollup-pluginutils';
 import { minify } from 'html-minifier';
+import MagicString from 'magic-string';
 
 export default function string(opts = {}) {
-	if (!opts.include) {
-		opts.include = '**/*.html'
-	}
+  const include = opts.include || '**/*.html';
+  const sourcemap = opts.sourcemap || opts.sourceMap;
+  const filter = createFilter(include, opts.exclude);
 
-	const filter = createFilter(opts.include, opts.exclude);
+  return {
+    name: 'html-string',
 
-	return {
-		name: 'html',
-
-		transform(code, id) {
-
-			if (filter(id)) {
-				const x = {
-					code: `export default ${JSON.stringify(minify(code, opts.htmlMinifierOptions))};`,
-					map: { mappings: '' }
-				};
-
-				return x;
-			}
-		}
-	};
+    transform(code, id) {
+      if (filter(id)) {
+        const s = new MagicString(code);
+        s.overwrite(0, s.length(), minify(code, opts.htmlMinifierOptions || {}));
+        const map = s.generateMap({
+          source: id,
+          includeContent: false,
+        });
+        const result = {
+          code: `export default ${JSON.stringify(s.toString())};`,
+          map: sourcemap ? map : { mappings: '' },
+        };
+        return result;
+      }
+      return undefined;
+    },
+  };
 }

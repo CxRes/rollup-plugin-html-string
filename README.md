@@ -1,42 +1,45 @@
-# rollup-plugin-html [![Build Status](https://travis-ci.org/bdadam/rollup-plugin-html.svg)](https://travis-ci.org/bdadam/rollup-plugin-html)
+# rollup-plugin-html-string
+
+[![Build Status](https://travis-ci.com/CxRes/rollup-plugin-html-string.svg?branch=master)](https://travis-ci.com/CxRes/rollup-plugin-html-string)
 
 Rollup plugin for loading content of HTML files to use as string variable in JavaScript code.
 
 ## Installation
 
 ```bash
-npm install --save-dev rollup-plugin-html
+npm install --save-dev rollup-plugin-html-string
 ```
-
 
 ## Usage
 
 ```js
-import { rollup } from 'rollup';
-import html from 'rollup-plugin-html';
+import htmlString from 'rollup-plugin-html-string';
 
-rollup({
-	entry: 'main.js',
+export default {
+	input: 'main.js',
 	plugins: [
-		html({
+		htmlString({
 			include: '**/*.html'
 		})
-	]
-}).then(...)
+	],
+	output: {
+		dir: 'dist',
+	},
+}
 ```
 
 ## Options
 
 ### include
 
-Type: `array` or `string`  
+Type: `array`, `string` or `regexp`
 Default: `**/*.html`
 
 A single file pattern, or an array of file patterns to include when importing html files. For more details see [rollup-pluginutils](https://github.com/rollup/rollup-pluginutils#createfilter).
 
 ### exclude
 
-Type: `array` or `string`  
+Type: `array`, `string` or `regexp`
 Default: `undefined`
 
 A single file pattern, or an array of file patterns to exclude when importing html files. For more details see [rollup-pluginutils](https://github.com/rollup/rollup-pluginutils#createfilter).
@@ -48,13 +51,14 @@ Default: `{}`
 
 The options which are given to [html-minifier](https://github.com/kangax/html-minifier#options-quick-reference)
 
-E.g.:
-```JavaScript
-rollup({
+For example:
+```js
+import htmlString from 'rollup-plugin-html-string';
+
+export default {
 	entry: 'main.js',
 	plugins: [
 		html({
-			include: '**/*.html',
 			htmlMinifierOptions: {
 				collapseWhitespace: true,
 				collapseBooleanAttributes: true,
@@ -62,8 +66,11 @@ rollup({
 				minifyJS: true
 			}
 		})
-	]
-}).then(...)
+	],
+	output: {
+		dir: 'dist',
+	},
+}
 ```
 
 ## License
@@ -72,4 +79,6 @@ MIT
 
 ## Credits
 
-Thanks for Bogdan Chadkin (@TrySound) for his [rollup-plugin-string](https://github.com/TrySound/rollup-plugin-string) rollup plugin which I used as the basis for this plugin.
+This plugin is forked from [rollup-plugin-html](https://github.com/bdadam/rollup-plugin-html) written by Adam Beres-Deak (@bdadam).
+
+He thanks Bogdan Chadkin (@TrySound) for his [rollup-plugin-string](https://github.com/TrySound/rollup-plugin-string) rollup plugin which he used as the basis for this plugin.

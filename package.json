@@ -1,10 +1,14 @@
 {
   "name": "rollup-plugin-html-string",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Rollup plugin to import HTML files as string",
   "type": "module",
   "main": "dist/rollup-plugin-html.js",
   "module": "dist/rollup-plugin-html.mjs",
+  "exports": {
+    "import": "./dist/rollup-plugin-html.mjs",
+    "require": "./dist/rollup-plugin-html.js"
+  },
   "files": [
     "dist"
   ],
